@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BasuraSmart - Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Tailwind-inspired CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-50: #f0fdf4;
+            --primary-100: #dcfce7;
+            --primary-200: #bbf7d0;
+            --primary-300: #86efac;
+            --primary-400: #4ade80;
+            --primary-500: #22c55e;
+            --primary-600: #16a34a;
+            --primary-700: #15803d;
+            --primary-800: #166534;
+            --primary-900: #14532d;
+            
+            --secondary-50: #f8fafc;
+            --secondary-100: #f1f5f9;
+            --secondary-200: #e2e8f0;
+            --secondary-300: #cbd5e1;
+            --secondary-400: #94a3b8;
+            --secondary-500: #64748b;
+            --secondary-600: #475569;
+            --secondary-700: #334155;
+            --secondary-800: #1e293b;
+            --secondary-900: #0f172a;
+            
+            --accent-50: #fefce8;
+            --accent-100: #fef9c3;
+            --accent-200: #fef08a;
+            --accent-300: #fde047;
+            --accent-400: #facc15;
+            --accent-500: #eab308;
+            --accent-600: #ca8a04;
+            --accent-700: #a16207;
+            --accent-800: #854d0e;
+            --accent-900: #713f12;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(135deg, var(--primary-50) 0%, white 50%, var(--accent-50) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 28rem;
+            margin: 0 auto;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 5rem;
+            height: 5rem;
+            background: var(--primary-100);
+            border-radius: 50%;
+            margin-bottom: 1rem;
+            animation: pulseGreen 2s infinite;
+        }
+
+        .logo i {
+            width: 2.5rem;
+            height: 2.5rem;
+            color: var(--primary-600);
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary-600), var(--accent-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--secondary-600);
+            font-size: 0.875rem;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            animation: slideUp 0.5s ease-out;
+            animation-delay: 0.1s;
+            animation-fill-mode: both;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--secondary-700);
+            margin-bottom: 0.5rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1.25rem;
+            height: 1.25rem;
+            color: var(--secondary-400);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1.25rem;
+            height: 1.25rem;
+            color: var(--secondary-400);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .password-toggle:hover {
+            color: var(--secondary-600);
+        }
+
+        input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            padding-left: 2.75rem;
+            padding-right: 2.75rem;
+            border: 1px solid var(--secondary-200);
+            border-radius: 0.5rem;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(4px);
+            font-size: 1rem;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: transparent;
+            box-shadow: 0 0 0 2px var(--primary-500);
+        }
+
+        input::placeholder {
+            color: var(--secondary-400);
+        }
+
+        .error-text {
+            color: #ef4444;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-top: 0.25rem;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .success-text {
+            color: var(--primary-600);
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-top: 0.25rem;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .alert {
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .alert-error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+        }
+
+        .alert-success {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: var(--primary-700);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.025em;
+            cursor: pointer;
+            transition: all 0.2s;
+            transform: translateY(0);
+            outline: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--primary-600);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-700);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transform: translateY(-0.125rem);
+        }
+
+        .btn-primary:focus {
+            box-shadow: 0 0 0 2px var(--primary-500), 0 0 0 4px rgba(34, 197, 94, 0.1);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .spinner {
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .forgot-password button {
+            color: var(--primary-600);
+            font-size: 0.875rem;
+            font-weight: 500;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .forgot-password button:hover:not(:disabled) {
+            color: var(--primary-700);
+        }
+
+        .demo-credentials {
+            margin-top: 1.5rem;
+            text-align: center;
+            animation: slideUp 0.5s ease-out;
+            animation-delay: 0.2s;
+            animation-fill-mode: both;
+        }
+
+        .demo-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem;
+            background: var(--accent-50);
+            border-radius: 0.5rem;
+        }
+
+        .demo-box div {
+            text-align: left;
+        }
+
+        .demo-title {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--accent-800);
+            margin-bottom: 0.25rem;
+        }
+
+        .demo-info {
+            font-size: 0.75rem;
+            color: var(--accent-600);
+        }
+
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+            animation: slideUp 0.5s ease-out;
+            animation-delay: 0.3s;
+            animation-fill-mode: both;
+        }
+
+        .footer-icons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            color: var(--secondary-500);
+            font-size: 0.75rem;
+        }
+
+        .footer-icons span {
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-icons i {
+            width: 1rem;
+            height: 1rem;
+            margin-right: 0.25rem;
+        }
+
+        .copyright {
+            color: var(--secondary-400);
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                transform: translateY(1.25rem);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulseGreen {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+            50% { box-shadow: 0 0 0 0.625rem rgba(34, 197, 94, 0); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 640px) {
+            .container {
+                max-width: 100%;
+            }
+            
+            .login-card {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Logo Section -->
+        <div class="logo-section">
+            <div class="logo">
+                <i data-lucide="leaf"></i>
+            </div>
+            <h1>BasuraSmart</h1>
+            <p class="subtitle">Waste Management System</p>
+        </div>
+
+        <!-- Login Form -->
+        <div class="login-card">
+            <form id="loginForm">
+                <!-- Email Field -->
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <div class="input-wrapper">
+                        <i class="input-icon" data-lucide="mail"></i>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Enter your email"
+                            required
+                        >
+                    </div>
+                    <div id="emailError" class="error-text" style="display: none;"></div>
+                </div>
+
+                <!-- Password Field -->
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <i class="input-icon" data-lucide="lock"></i>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            required
+                        >
+                        <i class="password-toggle" data-lucide="eye" id="passwordToggle"></i>
+                    </div>
+                    <div id="passwordError" class="error-text" style="display: none;"></div>
+                </div>
+
+                <!-- Alert Messages -->
+                <div id="alertMessage" style="display: none;"></div>
+
+                <!-- Login Button -->
+                <button type="submit" class="btn btn-primary" id="loginBtn">
+                    Sign In
+                </button>
+
+                <!-- Forgot Password -->
+                <div class="forgot-password">
+                    <button type="button" id="forgotPasswordBtn">
+                        Forgot your password?
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Demo Credentials -->
+        <div class="demo-credentials">
+            <div class="demo-box">
+                <div>
+                    <div class="demo-title">Demo Credentials:</div>
+                    <div class="demo-info">Email: admin@basurasmart.com</div>
+                    <div class="demo-info">Password: admin123</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-icons">
+                <span>
+                    <i data-lucide="recycle"></i>
+                    Eco-Friendly
+                </span>
+                <span>
+                    <i data-lucide="truck"></i>
+                    Smart Collection
+                </span>
+            </div>
+            <p class="copyright">© 2024 BasuraSmart. Clean communities, smart solutions.</p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Form elements
+        const form = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const emailError = document.getElementById('emailError');
+        const passwordError = document.getElementById('passwordError');
+        const alertMessage = document.getElementById('alertMessage');
+        const loginBtn = document.getElementById('loginBtn');
+        const passwordToggle = document.getElementById('passwordToggle');
+        const forgotPasswordBtn = document.getElementById('forgotPasswordBtn');
+
+        // State
+        let isLoading = false;
+        let showPassword = false;
+
+        // Validation functions
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function validatePassword(password) {
+            return password.length >= 6;
+        }
+
+        function showError(element, message) {
+            element.textContent = message;
+            element.style.display = 'block';
+        }
+
+        function hideError(element) {
+            element.style.display = 'none';
+        }
+
+        function showAlert(message, type) {
+            alertMessage.textContent = message;
+            alertMessage.className = `alert alert-${type}`;
+            alertMessage.style.display = 'block';
+        }
+
+        function hideAlert() {
+            alertMessage.style.display = 'none';
+        }
+
+        // Password toggle
+        passwordToggle.addEventListener('click', function() {
+            showPassword = !showPassword;
+            passwordInput.type = showPassword ? 'text' : 'password';
+            
+            // Update icon
+            passwordToggle.setAttribute('data-lucide', showPassword ? 'eye-off' : 'eye');
+            lucide.createIcons();
+        });
+
+        // Real-time validation
+        emailInput.addEventListener('blur', function() {
+            const email = this.value.trim();
+            if (!email) {
+                showError(emailError, 'Email is required');
+            } else if (!validateEmail(email)) {
+                showError(emailError, 'Please enter a valid email address');
+            } else {
+                hideError(emailError);
+            }
+        });
+
+        passwordInput.addEventListener('blur', function() {
+            const password = this.value;
+            if (!password) {
+                showError(passwordError, 'Password is required');
+            } else if (!validatePassword(password)) {
+                showError(passwordError, 'Password must be at least 6 characters');
+            } else {
+                hideError(passwordError);
+            }
+        });
+
+        // Form submission
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (isLoading) return;
+
+            // Clear previous errors
+            hideError(emailError);
+            hideError(passwordError);
+            hideAlert();
+
+            // Get form values
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            // Validate
+            let hasError = false;
+
+            if (!email) {
+                showError(emailError, 'Email is required');
+                hasError = true;
+            } else if (!validateEmail(email)) {
+                showError(emailError, 'Please enter a valid email address');
+                hasError = true;
+            }
+
+            if (!password) {
+                showError(passwordError, 'Password is required');
+                hasError = true;
+            } else if (!validatePassword(password)) {
+                showError(passwordError, 'Password must be at least 6 characters');
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            // Show loading state
+            isLoading = true;
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = `
+                <div class="btn-loading">
+                    <div class="spinner"></div>
+                    Signing in...
+                </div>
+            `;
+
+            try {
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 1500));
+
+                // Mock authentication
+                if (email === 'admin@basurasmart.com' && password === 'admin123') {
+                    showAlert('Login successful! Redirecting...', 'success');
+                    setTimeout(() => {
+                        console.log('Navigate to dashboard');
+                        // window.location.href = '/dashboard';
+                    }, 1500);
+                } else {
+                    showAlert('Invalid email or password', 'error');
+                }
+            } catch (error) {
+                showAlert('Something went wrong. Please try again.', 'error');
+            } finally {
+                // Reset loading state
+                isLoading = false;
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = 'Sign In';
+            }
+        });
+
+        // Forgot password
+        forgotPasswordBtn.addEventListener('click', function() {
+            if (isLoading) return;
+            showAlert('Password reset link has been sent to your email', 'success');
+        });
+
+        // Clear errors on input
+        emailInput.addEventListener('input', function() {
+            if (emailError.style.display !== 'none') {
+                hideError(emailError);
+            }
+        });
+
+        passwordInput.addEventListener('input', function() {
+            if (passwordError.style.display !== 'none') {
+                hideError(passwordError);
+            }
+        });
+    </script>
+</body>
+</html>

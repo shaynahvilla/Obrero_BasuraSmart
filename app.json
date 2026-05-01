@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "BasuraSmart",
+    "slug": "basurasmart",
+    "version": "1.0.0",
+    "scheme": "basurasmart",
+    "platforms": ["ios", "android"],
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#ecfdf5"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.basurasmart.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#ecfdf5"
+      },
+      "package": "com.basurasmart.app"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

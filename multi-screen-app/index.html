@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BasuraSmart - Waste Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-50: #f0fdf4;
+            --primary-100: #dcfce7;
+            --primary-200: #bbf7d0;
+            --primary-300: #86efac;
+            --primary-400: #4ade80;
+            --primary-500: #22c55e;
+            --primary-600: #16a34a;
+            --primary-700: #15803d;
+            --primary-800: #166534;
+            --primary-900: #14532d;
+            
+            --secondary-50: #f8fafc;
+            --secondary-100: #f1f5f9;
+            --secondary-200: #e2e8f0;
+            --secondary-300: #cbd5e1;
+            --secondary-400: #94a3b8;
+            --secondary-500: #64748b;
+            --secondary-600: #475569;
+            --secondary-700: #334155;
+            --secondary-800: #1e293b;
+            --secondary-900: #0f172a;
+            
+            --accent-50: #fefce8;
+            --accent-100: #fef9c3;
+            --accent-200: #fef08a;
+            --accent-300: #fde047;
+            --accent-400: #facc15;
+            --accent-500: #eab308;
+            --accent-600: #ca8a04;
+            --accent-700: #a16207;
+            --accent-800: #854d0e;
+            --accent-900: #713f12;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(135deg, var(--primary-50) 0%, white 50%, var(--accent-50) 100%);
+            min-height: 100vh;
+            color: var(--secondary-900);
+        }
+
+        /* Screen Navigation */
+        .screen {
+            display: none;
+            min-height: 100vh;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Login Screen Styles */
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 28rem;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        /* Dashboard Styles */
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--secondary-200);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1rem 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: var(--secondary-700);
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-size: 0.875rem;
+        }
+
+        .nav-item:hover {
+            background: var(--primary-50);
+            color: var(--primary-600);
+        }
+
+        .nav-item.active {
+            background: var(--primary-100);
+            color: var(--primary-700);
+            border-left: 3px solid var(--primary-600);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .content-header {
+            margin-bottom: 2rem;
+        }
+
+        .welcome-section {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-icon {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--secondary-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            color: var(--secondary-600);
+            font-size: 0.875rem;
+        }
+
+        /* Schedule Screen */
+        .schedule-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .schedule-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: var(--secondary-200);
+            border: 1px solid var(--secondary-200);
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .calendar-day {
+            background: white;
+            padding: 1rem;
+            min-height: 100px;
+        }
+
+        .calendar-day-header {
+            font-weight: 600;
+            color: var(--secondary-700);
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .schedule-item {
+            background: var(--primary-100);
+            border-left: 3px solid var(--primary-500);
+            padding: 0.25rem 0.5rem;
+            margin-bottom: 0.25rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .schedule-item:hover {
+            background: var(--primary-200);
+        }
+
+        .schedule-item.biodegradable {
+            border-left-color: var(--primary-500);
+        }
+
+        .schedule-item.non-biodegradable {
+            border-left-color: var(--secondary-500);
+            background: var(--secondary-100);
+        }
+
+        .schedule-item.recyclable {
+            border-left-color: var(--accent-500);
+            background: var(--accent-100);
+        }
+
+        /* Routes Screen */
+        .routes-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .route-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .route-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .route-stops {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .stop-badge {
+            background: var(--secondary-100);
+            color: var(--secondary-700);
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .stop-badge.completed {
+            background: var(--primary-100);
+            color: var(--primary-700);
+        }
+
+        /* Profile Screen */
+        .profile-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--secondary-200);
+        }
+
+        .profile-avatar {
+            width: 5rem;
+            height: 5rem;
+            border-radius: 50%;
+            background: var(--primary-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-info h2 {
+            margin-bottom: 0.25rem;
+        }
+
+        .profile-info p {
+            color: var(--secondary-600);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Common Components */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-600);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-700);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--secondary-700);
+            border: 1px solid var(--secondary-300);
+        }
+
+        .btn-secondary:hover {
+            background: var(--secondary-50);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--secondary-200);
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary-500);
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--secondary-700);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                transform: translateY(1.25rem);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -250px;
+                top: 0;
+                height: 100vh;
+                z-index: 1000;
+                transition: left 0.3s;
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .calendar-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="screen active">
+        <div class="login-container">
+            <div class="login-card">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 5rem; height: 5rem; background: var(--primary-100); border-radius: 50%; margin-bottom: 1rem;">
+                        <i data-lucide="leaf" style="width: 2.5rem; height: 2.5rem; color: var(--primary-600);"></i>
+                    </div>
+                    <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; background: linear-gradient(135deg, var(--primary-600), var(--accent-600)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">BasuraSmart</h1>
+                    <p style="color: var(--secondary-600); font-size: 0.875rem;">Waste Management System</p>
+                </div>
+
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <div style="position: relative;">
+                            <i data-lucide="mail" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); width: 1.25rem; height: 1.25rem; color: var(--secondary-400);"></i>
+                            <input type="email" id="email" class="input-field" placeholder="Enter your email" style="padding-left: 2.75rem;" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div style="position: relative;">
+                            <i data-lucide="lock" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); width: 1.25rem; height: 1.25rem; color: var(--secondary-400);"></i>
+                            <input type="password" id="password" class="input-field" placeholder="Enter your password" style="padding-left: 2.75rem;" required>
+                        </div>
+                    </div>
+
+                    <div id="loginError" style="background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 1rem; font-size: 0.875rem; display: none;"></div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                        Sign In
+                    </button>
+
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <small style="color: var(--secondary-500);">Demo: admin@basurasmart.com / admin123</small>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Screen -->
+    <div id="dashboardScreen" class="screen">
+        <div class="dashboard-container">
+            <button class="menu-toggle" id="menuToggle">
+                <i data-lucide="menu"></i>
+            </button>
+
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <i data-lucide="leaf" style="width: 2rem; height: 2rem; color: var(--primary-600);"></i>
+                    <div>
+                        <h3 style="font-weight: 600; color: var(--secondary-900);">BasuraSmart</h3>
+                        <p style="font-size: 0.75rem; color: var(--secondary-600);">Waste Management</p>
+                    </div>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <button class="nav-item active" data-screen="dashboard">
+                        <i data-lucide="home" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Dashboard
+                    </button>
+                    <button class="nav-item" data-screen="schedules">
+                        <i data-lucide="calendar" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Schedules
+                    </button>
+                    <button class="nav-item" data-screen="routes">
+                        <i data-lucide="map" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Routes
+                    </button>
+                    <button class="nav-item" data-screen="collections">
+                        <i data-lucide="truck" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Collections
+                    </button>
+                    <button class="nav-item" data-screen="profile">
+                        <i data-lucide="user" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Profile
+                    </button>
+                </nav>
+
+                <div style="padding: 1rem; border-top: 1px solid var(--secondary-200);">
+                    <button class="nav-item" id="logoutBtn" style="color: var(--secondary-600);">
+                        <i data-lucide="log-out" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Logout
+                    </button>
+                </div>
+            </aside>
+
+            <main class="main-content">
+                <div class="content-header">
+                    <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">Welcome back, Admin!</h1>
+                    <p style="color: var(--secondary-600);">Here's what's happening with your waste management today.</p>
+                </div>
+
+                <div class="welcome-section">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <div>
+                            <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.25rem;">Today's Overview</h2>
+                            <p style="color: var(--secondary-600); font-size: 0.875rem;">Real-time waste collection status</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <p style="font-size: 0.875rem; color: var(--secondary-600);">Last updated</p>
+                            <p style="font-weight: 500;" id="currentTime"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: var(--primary-100);">
+                            <i data-lucide="truck" style="width: 1.5rem; height: 1.5rem; color: var(--primary-600);"></i>
+                        </div>
+                        <div class="stat-value">24</div>
+                        <div class="stat-label">Collections Today</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: var(--accent-100);">
+                            <i data-lucide="users" style="width: 1.5rem; height: 1.5rem; color: var(--accent-600);"></i>
+                        </div>
+                        <div class="stat-value">1,247</div>
+                        <div class="stat-label">Active Residents</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: var(--secondary-100);">
+                            <i data-lucide="route" style="width: 1.5rem; height: 1.5rem; color: var(--secondary-600);"></i>
+                        </div>
+                        <div class="stat-value">8</div>
+                        <div class="stat-label">Active Routes</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #fef2f2;">
+                            <i data-lucide="recycle" style="width: 1.5rem; height: 1.5rem; color: #dc2626;"></i>
+                        </div>
+                        <div class="stat-value">2.4t</div>
+                        <div class="stat-label">Waste Collected</div>
+                    </div>
+                </div>
+
+                <div style="background: white; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+                    <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem;">Recent Activity</h3>
+                    <div style="space-y: 0.75rem;">
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid var(--secondary-100);">
+                            <div style="width: 2rem; height: 2rem; background: var(--primary-100); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i data-lucide="check" style="width: 1rem; height: 1rem; color: var(--primary-600);"></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <p style="font-weight: 500; font-size: 0.875rem;">Route A completed</p>
+                                <p style="color: var(--secondary-600); font-size: 0.75rem;">All 12 stops collected successfully</p>
+                            </div>
+                            <span style="color: var(--secondary-500); font-size: 0.75rem;">2h ago</span>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid var(--secondary-100);">
+                            <div style="width: 2rem; height: 2rem; background: var(--accent-100); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i data-lucide="user-plus" style="width: 1rem; height: 1rem; color: var(--accent-600);"></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <p style="font-weight: 500; font-size: 0.875rem;">New resident registered</p>
+                                <p style="color: var(--secondary-600); font-size: 0.75rem;">John Doe added to Barangay Obrero</p>
+                            </div>
+                            <span style="color: var(--secondary-500); font-size: 0.75rem;">4h ago</span>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 0.75rem 0;">
+                            <div style="width: 2rem; height: 2rem; background: var(--secondary-100); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i data-lucide="calendar" style="width: 1rem; height: 1rem; color: var(--secondary-600);"></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <p style="font-weight: 500; font-size: 0.875rem;">Schedule updated</p>
+                                <p style="color: var(--secondary-600); font-size: 0.75rem;">Tomorrow's collection route optimized</p>
+                            </div>
+                            <span style="color: var(--secondary-500); font-size: 0.75rem;">6h ago</span>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Schedules Screen -->
+    <div id="schedulesScreen" class="screen">
+        <div class="dashboard-container">
+            <button class="menu-toggle" id="menuToggle2">
+                <i data-lucide="menu"></i>
+            </button>
+
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <i data-lucide="leaf" style="width: 2rem; height: 2rem; color: var(--primary-600);"></i>
+                    <div>
+                        <h3 style="font-weight: 600; color: var(--secondary-900);">BasuraSmart</h3>
+                        <p style="font-size: 0.75rem; color: var(--secondary-600);">Waste Management</p>
+                    </div>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <button class="nav-item" data-screen="dashboard">
+                        <i data-lucide="home" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Dashboard
+                    </button>
+                    <button class="nav-item active" data-screen="schedules">
+                        <i data-lucide="calendar" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Schedules
+                    </button>
+                    <button class="nav-item" data-screen="routes">
+                        <i data-lucide="map" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Routes
+                    </button>
+                    <button class="nav-item" data-screen="collections">
+                        <i data-lucide="truck" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Collections
+                    </button>
+                    <button class="nav-item" data-screen="profile">
+                        <i data-lucide="user" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Profile
+                    </button>
+                </nav>
+            </aside>
+
+            <main class="main-content">
+                <div class="schedule-container">
+                    <div class="schedule-header">
+                        <div>
+                            <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">Collection Schedules</h1>
+                            <p style="color: var(--secondary-600);">Manage and view waste collection schedules</p>
+                        </div>
+                        <button class="btn btn-primary">
+                            <i data-lucide="plus" style="width: 1rem; height: 1rem;"></i>
+                            Add Schedule
+                        </button>
+                    </div>
+
+                    <div style="background: white; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); margin-bottom: 2rem;">
+                        <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                            <button class="btn btn-secondary">Week</button>
+                            <button class="btn btn-primary">Month</button>
+                            <button class="btn btn-secondary">Year</button>
+                        </div>
+
+                        <div class="calendar-grid">
+                            <div class="calendar-day">
+                                <div class="calendar-day-header">Mon</div>
+                                <div class="schedule-item biodegradable">Biodegradable</div>
+                                <div class="schedule-item">8:00 AM</div>
+                            </div>
+                            <div class="calendar-day">
+                                <div class="calendar-day-header">Tue</div>
+                                <div class="schedule-item non-biodegradable">Non-biodegradable</div>
+                                <div class="schedule-item">9:00 AM</div>
+                            </div>
+                            <div class="calendar-day">
+                                <div class="calendar-day-header">Wed</div>
+                                <div class="schedule-item recyclable">Recyclables</div>
+                                <div class="schedule-item">8:00 AM</div>
+                            </div>
+                            <div class="calendar-day">
+                                <div class="calendar-day-header">Thu</div>
+                            </div>
+                            <div class="calendar-day">
+                                <div class="calendar-day-header">Fri</div>
+                                <div class="schedule-item biodegradable">Biodegradable</div>
+                                <div class="schedule-item">8:00 AM</div>
+                            </div>
+                            <div class="calendar-day">
+                                <div class="calendar-day-header">Sat</div>
+                                <div class="schedule-item non-biodegradable">Non-biodegradable</div>
+                                <div class="schedule-item">9:00 AM</div>
+                            </div>
+                            <div class="calendar-day">
+                                <div class="calendar-day-header">Sun</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: white; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+                        <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem;">Upcoming Collections</h3>
+                        <div style="space-y: 1rem;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; border: 1px solid var(--secondary-200); border-radius: 0.5rem;">
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <div style="width: 3rem; height: 3rem; background: var(--primary-100); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center;">
+                                        <i data-lucide="leaf" style="width: 1.5rem; height: 1.5rem; color: var(--primary-600);"></i>
+                                    </div>
+                                    <div>
+                                        <p style="font-weight: 500;">Biodegradable Collection</p>
+                                        <p style="color: var(--secondary-600); font-size: 0.875rem;">Tomorrow, 8:00 AM - Route A</p>
+                                    </div>
+                                </div>
+                                <button class="btn btn-secondary">View Details</button>
+                            </div>
+
+                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; border: 1px solid var(--secondary-200); border-radius: 0.5rem;">
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <div style="width: 3rem; height: 3rem; background: var(--accent-100); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center;">
+                                        <i data-lucide="recycle" style="width: 1.5rem; height: 1.5rem; color: var(--accent-600);"></i>
+                                    </div>
+                                    <div>
+                                        <p style="font-weight: 500;">Recyclables Collection</p>
+                                        <p style="color: var(--secondary-600); font-size: 0.875rem;">Wednesday, 8:00 AM - Route B</p>
+                                    </div>
+                                </div>
+                                <button class="btn btn-secondary">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Routes Screen -->
+    <div id="routesScreen" class="screen">
+        <div class="dashboard-container">
+            <button class="menu-toggle" id="menuToggle3">
+                <i data-lucide="menu"></i>
+            </button>
+
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <i data-lucide="leaf" style="width: 2rem; height: 2rem; color: var(--primary-600);"></i>
+                    <div>
+                        <h3 style="font-weight: 600; color: var(--secondary-900);">BasuraSmart</h3>
+                        <p style="font-size: 0.75rem; color: var(--secondary-600);">Waste Management</p>
+                    </div>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <button class="nav-item" data-screen="dashboard">
+                        <i data-lucide="home" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Dashboard
+                    </button>
+                    <button class="nav-item" data-screen="schedules">
+                        <i data-lucide="calendar" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Schedules
+                    </button>
+                    <button class="nav-item active" data-screen="routes">
+                        <i data-lucide="map" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Routes
+                    </button>
+                    <button class="nav-item" data-screen="collections">
+                        <i data-lucide="truck" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Collections
+                    </button>
+                    <button class="nav-item" data-screen="profile">
+                        <i data-lucide="user" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Profile
+                    </button>
+                </nav>
+            </aside>
+
+            <main class="main-content">
+                <div class="routes-container">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <div>
+                            <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">Collection Routes</h1>
+                            <p style="color: var(--secondary-600);">Manage waste collection routes and stops</p>
+                        </div>
+                        <button class="btn btn-primary">
+                            <i data-lucide="plus" style="width: 1rem; height: 1rem;"></i>
+                            Create Route
+                        </button>
+                    </div>
+
+                    <div class="route-card">
+                        <div class="route-header">
+                            <div>
+                                <h3 style="font-weight: 600; margin-bottom: 0.25rem;">Route A - Barangay Obrero North</h3>
+                                <p style="color: var(--secondary-600); font-size: 0.875rem;">12 stops • Assigned to: Juan Dela Cruz</p>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <span style="background: var(--primary-100); color: var(--primary-700); padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.75rem;">Active</span>
+                                <button class="btn btn-secondary">Edit</button>
+                            </div>
+                        </div>
+                        <div class="route-stops">
+                            <div class="stop-badge completed">
+                                <i data-lucide="check" style="width: 0.75rem; height: 0.75rem;"></i>
+                                Stop 1 - Main Street
+                            </div>
+                            <div class="stop-badge completed">
+                                <i data-lucide="check" style="width: 0.75rem; height: 0.75rem;"></i>
+                                Stop 2 - School Area
+                            </div>
+                            <div class="stop-badge">
+                                <i data-lucide="clock" style="width: 0.75rem; height: 0.75rem;"></i>
+                                Stop 3 - Market Place
+                            </div>
+                            <div class="stop-badge">
+                                <i data-lucide="clock" style="width: 0.75rem; height: 0.75rem;"></i>
+                                Stop 4 - Residential Block A
+                            </div>
+                            <div class="stop-badge">
+                                <i data-lucide="clock" style="width: 0.75rem; height: 0.75rem;"></i>
+                                Stop 5 - Park Area
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="route-card">
+                        <div class="route-header">
+                            <div>
+                                <h3 style="font-weight: 600; margin-bottom: 0.25rem;">Route B - Barangay Obrero South</h3>
+                                <p style="color: var(--secondary-600); font-size: 0.875rem;">8 stops • Assigned to: Maria Santos</p>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <span style="background: var(--primary-100); color: var(--primary-700); padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.75rem;">Active</span>
+                                <button class="btn btn-secondary">Edit</button>
+                            </div>
+                        </div>
+                        <div class="route-stops">
+                            <div class="stop-badge completed">
+                                <i data-lucide="check" style="width: 0.75rem; height: 0.75rem;"></i>
+                                Stop 1 - Community Center
+                            </div>
+                            <div class="stop-badge">
+                                <i data-lucide="clock" style="width: 0.75rem; height: 0.75rem;"></i>
+                                Stop 2 - Hospital Area
+                            </div>
+                            <div class="stop-badge">
+                                <i data-lucide="clock" style="width: 0.75rem; height: 0.75rem;"></i>
+                                Stop 3 - Commercial District
+                            </div>
+                            <div class="stop-badge">
+                                <i data-lucide="clock" style="width: 0.75rem; height: 0.75rem;"></i>
+                                Stop 4 - Industrial Zone
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="route-card">
+                        <div class="route-header">
+                            <div>
+                                <h3 style="font-weight: 600; margin-bottom: 0.25rem;">Route C - Barangay Obrero Central</h3>
+                                <p style="color: var(--secondary-600); font-size: 0.875rem;">15 stops • Not assigned</p>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <span style="background: var(--secondary-100); color: var(--secondary-700); padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.75rem;">Inactive</span>
+                                <button class="btn btn-secondary">Edit</button>
+                            </div>
+                        </div>
+                        <div class="route-stops">
+                            <div class="stop-badge">
+                                <i data-lucide="map-pin" style="width: 0.75rem; height: 0.75rem;"></i>
+                                Stop 1 - City Hall
+                            </div>
+                            <div class="stop-badge">
+                                <i data-lucide="map-pin" style="width: 0.75rem; height: 0.75rem;"></i>
+                                Stop 2 - Public Market
+                            </div>
+                            <div class="stop-badge">
+                                <i data-lucide="map-pin" style="width: 0.75rem; height: 0.75rem;"></i>
+                                Stop 3 - Bus Terminal
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Collections Screen -->
+    <div id="collectionsScreen" class="screen">
+        <div class="dashboard-container">
+            <button class="menu-toggle" id="menuToggle4">
+                <i data-lucide="menu"></i>
+            </button>
+
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <i data-lucide="leaf" style="width: 2rem; height: 2rem; color: var(--primary-600);"></i>
+                    <div>
+                        <h3 style="font-weight: 600; color: var(--secondary-900);">BasuraSmart</h3>
+                        <p style="font-size: 0.75rem; color: var(--secondary-600);">Waste Management</p>
+                    </div>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <button class="nav-item" data-screen="dashboard">
+                        <i data-lucide="home" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Dashboard
+                    </button>
+                    <button class="nav-item" data-screen="schedules">
+                        <i data-lucide="calendar" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Schedules
+                    </button>
+                    <button class="nav-item" data-screen="routes">
+                        <i data-lucide="map" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Routes
+                    </button>
+                    <button class="nav-item active" data-screen="collections">
+                        <i data-lucide="truck" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Collections
+                    </button>
+                    <button class="nav-item" data-screen="profile">
+                        <i data-lucide="user" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Profile
+                    </button>
+                </nav>
+            </aside>
+
+            <main class="main-content">
+                <div style="max-width: 1200px; margin: 0 auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <div>
+                            <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">Collection Records</h1>
+                            <p style="color: var(--secondary-600);">Track and manage waste collection data</p>
+                        </div>
+                        <button class="btn btn-primary">
+                            <i data-lucide="download" style="width: 1rem; height: 1rem;"></i>
+                            Export Report
+                        </button>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: var(--primary-100);">
+                                <i data-lucide="truck" style="width: 1.5rem; height: 1.5rem; color: var(--primary-600);"></i>
+                            </div>
+                            <div class="stat-value">156</div>
+                            <div class="stat-label">Total Collections</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: var(--accent-100);">
+                                <i data-lucide="trending-up" style="width: 1.5rem; height: 1.5rem; color: var(--accent-600);"></i>
+                            </div>
+                            <div class="stat-value">94%</div>
+                            <div class="stat-label">Completion Rate</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: var(--secondary-100);">
+                                <i data-lucide="weight" style="width: 1.5rem; height: 1.5rem; color: var(--secondary-600);"></i>
+                            </div>
+                            <div class="stat-value">12.4t</div>
+                            <div class="stat-label">Total Weight</div>
+                        </div>
+                    </div>
+
+                    <div style="background: white; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+                        <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem;">Recent Collections</h3>
+                        <div style="overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="border-bottom: 1px solid var(--secondary-200);">
+                                        <th style="text-align: left; padding: 0.75rem; font-weight: 600; color: var(--secondary-700);">Date</th>
+                                        <th style="text-align: left; padding: 0.75rem; font-weight: 600; color: var(--secondary-700);">Route</th>
+                                        <th style="text-align: left; padding: 0.75rem; font-weight: 600; color: var(--secondary-700);">Collector</th>
+                                        <th style="text-align: left; padding: 0.75rem; font-weight: 600; color: var(--secondary-700);">Waste Type</th>
+                                        <th style="text-align: left; padding: 0.75rem; font-weight: 600; color: var(--secondary-700);">Weight</th>
+                                        <th style="text-align: left; padding: 0.75rem; font-weight: 600; color: var(--secondary-700);">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="border-bottom: 1px solid var(--secondary-100);">
+                                        <td style="padding: 0.75rem;">May 1, 2024</td>
+                                        <td style="padding: 0.75rem;">Route A</td>
+                                        <td style="padding: 0.75rem;">Juan Dela Cruz</td>
+                                        <td style="padding: 0.75rem;">
+                                            <span style="background: var(--primary-100); color: var(--primary-700); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem;">Biodegradable</span>
+                                        </td>
+                                        <td style="padding: 0.75rem;">245kg</td>
+                                        <td style="padding: 0.75rem;">
+                                            <span style="background: var(--primary-100); color: var(--primary-700); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem;">Completed</span>
+                                        </td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid var(--secondary-100);">
+                                        <td style="padding: 0.75rem;">May 1, 2024</td>
+                                        <td style="padding: 0.75rem;">Route B</td>
+                                        <td style="padding: 0.75rem;">Maria Santos</td>
+                                        <td style="padding: 0.75rem;">
+                                            <span style="background: var(--secondary-100); color: var(--secondary-700); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem;">Non-biodegradable</span>
+                                        </td>
+                                        <td style="padding: 0.75rem;">180kg</td>
+                                        <td style="padding: 0.75rem;">
+                                            <span style="background: var(--primary-100); color: var(--primary-700); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem;">Completed</span>
+                                        </td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid var(--secondary-100);">
+                                        <td style="padding: 0.75rem;">April 30, 2024</td>
+                                        <td style="padding: 0.75rem;">Route A</td>
+                                        <td style="padding: 0.75rem;">Juan Dela Cruz</td>
+                                        <td style="padding: 0.75rem;">
+                                            <span style="background: var(--accent-100); color: var(--accent-700); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem;">Recyclable</span>
+                                        </td>
+                                        <td style="padding: 0.75rem;">95kg</td>
+                                        <td style="padding: 0.75rem;">
+                                            <span style="background: var(--primary-100); color: var(--primary-700); padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem;">Completed</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Profile Screen -->
+    <div id="profileScreen" class="screen">
+        <div class="dashboard-container">
+            <button class="menu-toggle" id="menuToggle5">
+                <i data-lucide="menu"></i>
+            </button>
+
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <i data-lucide="leaf" style="width: 2rem; height: 2rem; color: var(--primary-600);"></i>
+                    <div>
+                        <h3 style="font-weight: 600; color: var(--secondary-900);">BasuraSmart</h3>
+                        <p style="font-size: 0.75rem; color: var(--secondary-600);">Waste Management</p>
+                    </div>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <button class="nav-item" data-screen="dashboard">
+                        <i data-lucide="home" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Dashboard
+                    </button>
+                    <button class="nav-item" data-screen="schedules">
+                        <i data-lucide="calendar" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Schedules
+                    </button>
+                    <button class="nav-item" data-screen="routes">
+                        <i data-lucide="map" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Routes
+                    </button>
+                    <button class="nav-item" data-screen="collections">
+                        <i data-lucide="truck" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Collections
+                    </button>
+                    <button class="nav-item active" data-screen="profile">
+                        <i data-lucide="user" style="width: 1.25rem; height: 1.25rem;"></i>
+                        Profile
+                    </button>
+                </nav>
+            </aside>
+
+            <main class="main-content">
+                <div class="profile-container">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <div>
+                            <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;">Profile Settings</h1>
+                            <p style="color: var(--secondary-600);">Manage your account information</p>
+                        </div>
+                    </div>
+
+                    <div class="profile-card">
+                        <div class="profile-header">
+                            <div class="profile-avatar">
+                                <i data-lucide="user" style="width: 2.5rem; height: 2.5rem; color: var(--primary-600);"></i>
+                            </div>
+                            <div class="profile-info">
+                                <h2>Admin User</h2>
+                                <p>admin@basurasmart.com</p>
+                                <p style="color: var(--secondary-600); font-size: 0.875rem;">System Administrator</p>
+                            </div>
+                        </div>
+
+                        <form>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="firstName">First Name</label>
+                                    <input type="text" id="firstName" class="input-field" value="Admin">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="lastName">Last Name</label>
+                                    <input type="text" id="lastName" class="input-field" value="User">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" id="email" class="input-field" value="admin@basurasmart.com">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="phone">Phone Number</label>
+                                    <input type="tel" id="phone" class="input-field" value="+63 912 345 6789">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="department">Department</label>
+                                    <input type="text" id="department" class="input-field" value="Waste Management">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="location">Location</label>
+                                    <input type="text" id="location" class="input-field" value="Barangay Obrero, Butuan City">
+                                </div>
+                            </div>
+
+                            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                                <button type="submit" class="btn btn-primary">
+                                    <i data-lucide="save" style="width: 1rem; height: 1rem;"></i>
+                                    Save Changes
+                                </button>
+                                <button type="button" class="btn btn-secondary">
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div style="background: white; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); margin-top: 2rem;">
+                        <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem;">Security Settings</h3>
+                        <div style="space-y: 1rem;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; border: 1px solid var(--secondary-200); border-radius: 0.5rem;">
+                                <div>
+                                    <p style="font-weight: 500;">Change Password</p>
+                                    <p style="color: var(--secondary-600); font-size: 0.875rem;">Last changed 30 days ago</p>
+                                </div>
+                                <button class="btn btn-secondary">Update</button>
+                            </div>
+
+                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; border: 1px solid var(--secondary-200); border-radius: 0.5rem;">
+                                <div>
+                                    <p style="font-weight: 500;">Two-Factor Authentication</p>
+                                    <p style="color: var(--secondary-600); font-size: 0.875rem;">Add an extra layer of security</p>
+                                </div>
+                                <button class="btn btn-secondary">Enable</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // App State
+        let currentUser = null;
+        let currentScreen = 'login';
+
+        // DOM Elements
+        const screens = {
+            login: document.getElementById('loginScreen'),
+            dashboard: document.getElementById('dashboardScreen'),
+            schedules: document.getElementById('schedulesScreen'),
+            routes: document.getElementById('routesScreen'),
+            collections: document.getElementById('collectionsScreen'),
+            profile: document.getElementById('profileScreen')
+        };
+
+        // Navigation
+        function showScreen(screenName) {
+            // Hide all screens
+            Object.values(screens).forEach(screen => {
+                screen.classList.remove('active');
+            });
+
+            // Show target screen
+            if (screens[screenName]) {
+                screens[screenName].classList.add('active');
+                currentScreen = screenName;
+
+                // Reinitialize icons for the new screen
+                setTimeout(() => lucide.createIcons(), 100);
+
+                // Update navigation active state
+                updateNavActive(screenName);
+            }
+        }
+
+        function updateNavActive(screenName) {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.screen === screenName) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // Login Form Handler
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('loginError');
+
+            // Basic validation
+            if (!email || !password) {
+                errorDiv.textContent = 'Please fill in all fields';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                errorDiv.textContent = 'Please enter a valid email address';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            // Show loading state
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<div style="display: flex; align-items: center; justify-content: center;"><div style="width: 1rem; height: 1rem; border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid white; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 0.5rem;"></div>Signing in...</div>';
+            submitBtn.disabled = true;
+
+            // Simulate API call
+            setTimeout(() => {
+                // Mock authentication
+                if (email === 'admin@basurasmart.com' && password === 'admin123') {
+                    currentUser = { email, name: 'Admin User' };
+                    showScreen('dashboard');
+                    updateTime();
+                    setInterval(updateTime, 60000); // Update time every minute
+                } else {
+                    errorDiv.textContent = 'Invalid email or password';
+                    errorDiv.style.display = 'block';
+                }
+
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 1500);
+        });
+
+        // Navigation Event Listeners
+        document.querySelectorAll('.nav-item[data-screen]').forEach(item => {
+            item.addEventListener('click', function() {
+                const screenName = this.dataset.screen;
+                showScreen(screenName);
+            });
+        });
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            currentUser = null;
+            showScreen('login');
+            document.getElementById('loginForm').reset();
+            document.getElementById('loginError').style.display = 'none';
+        });
+
+        // Mobile Menu Toggle
+        ['menuToggle', 'menuToggle2', 'menuToggle3', 'menuToggle4', 'menuToggle5'].forEach(id => {
+            const toggle = document.getElementById(id);
+            if (toggle) {
+                toggle.addEventListener('click', function() {
+                    const sidebar = this.closest('.dashboard-container').querySelector('.sidebar');
+                    sidebar.classList.toggle('open');
+                });
+            }
+        });
+
+        // Update current time
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleString('en-US', { 
+                month: 'short', 
+                day: 'numeric', 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            const timeElement = document.getElementById('currentTime');
+            if (timeElement) {
+                timeElement.textContent = timeString;
+            }
+        }
+
+        // Clear login errors on input
+        document.getElementById('email').addEventListener('input', function() {
+            document.getElementById('loginError').style.display = 'none';
+        });
+
+        document.getElementById('password').addEventListener('input', function() {
+            document.getElementById('loginError').style.display = 'none';
+        });
+
+        // Add CSS animation for spinner
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize
+        showScreen('login');
+    </script>
+</body>
+</html>

@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BasuraSmart - Mobile App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Mobile-First Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary-50: #f0fdf4;
+            --primary-100: #dcfce7;
+            --primary-200: #bbf7d0;
+            --primary-300: #86efac;
+            --primary-400: #4ade80;
+            --primary-500: #22c55e;
+            --primary-600: #16a34a;
+            --primary-700: #15803d;
+            --primary-800: #166534;
+            --primary-900: #14532d;
+            
+            --secondary-50: #f8fafc;
+            --secondary-100: #f1f5f9;
+            --secondary-200: #e2e8f0;
+            --secondary-300: #cbd5e1;
+            --secondary-400: #94a3b8;
+            --secondary-500: #64748b;
+            --secondary-600: #475569;
+            --secondary-700: #334155;
+            --secondary-800: #1e293b;
+            --secondary-900: #0f172a;
+            
+            --accent-50: #fefce8;
+            --accent-100: #fef9c3;
+            --accent-200: #fef08a;
+            --accent-300: #fde047;
+            --accent-400: #facc15;
+            --accent-500: #eab308;
+            --accent-600: #ca8a04;
+            --accent-700: #a16207;
+            --accent-800: #854d0e;
+            --accent-900: #713f12;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--secondary-50);
+            color: var(--secondary-900);
+            overflow-x: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Mobile App Container */
+        .mobile-app {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            position: relative;
+            max-width: 428px;
+            margin: 0 auto;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Status Bar */
+        .status-bar {
+            height: 44px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            font-size: 14px;
+            font-weight: 600;
+            position: relative;
+            z-index: 100;
+        }
+
+        .status-left {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .status-right {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Screen Navigation */
+        .screen {
+            display: none;
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .screen.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Login Screen */
+        .login-screen {
+            background: linear-gradient(135deg, var(--primary-50) 0%, white 50%, var(--accent-50) 100%);
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .login-content {
+            width: 100%;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .app-logo {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-600);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            box-shadow: 0 8px 24px rgba(34, 197, 94, 0.3);
+        }
+
+        .app-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--secondary-900);
+            margin-bottom: 8px;
+        }
+
+        .app-subtitle {
+            font-size: 16px;
+            color: var(--secondary-600);
+        }
+
+        /* Mobile Form Styles */
+        .form-section {
+            background: white;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 24px;
+        }
+
+        .form-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--secondary-900);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--secondary-700);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .mobile-input {
+            width: 100%;
+            height: 52px;
+            border: 2px solid var(--secondary-200);
+            border-radius: 16px;
+            padding: 0 16px;
+            font-size: 16px;
+            background: var(--secondary-50);
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        .mobile-input:focus {
+            border-color: var(--primary-500);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.1);
+        }
+
+        .mobile-input::placeholder {
+            color: var(--secondary-400);
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .input-icon i {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            color: var(--secondary-400);
+        }
+
+        .mobile-button {
+            width: 100%;
+            height: 56px;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mobile-button:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: var(--primary-600);
+            color: white;
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-primary:active {
+            background: var(--primary-700);
+        }
+
+        .btn-secondary {
+            background: var(--secondary-100);
+            color: var(--secondary-700);
+        }
+
+        .btn-secondary:active {
+            background: var(--secondary-200);
+        }
+
+        /* Dashboard Screen */
+        .dashboard-screen {
+            background: var(--secondary-50);
+        }
+
+        .dashboard-header {
+            background: white;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--secondary-200);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .welcome-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--secondary-900);
+        }
+
+        .notification-bell {
+            width: 44px;
+            height: 44px;
+            background: var(--secondary-100);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50%;
+        }
+
+        .location-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--secondary-600);
+            font-size: 14px;
+        }
+
+        /* Mobile Cards */
+        .mobile-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 16px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--secondary-900);
+        }
+
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .stat-item {
+            background: var(--secondary-50);
+            padding: 16px;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-600);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--secondary-600);
+        }
+
+        /* Schedule Cards */
+        .schedule-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--primary-500);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .schedule-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .schedule-title {
+            font-weight: 600;
+            color: var(--secondary-900);
+        }
+
+        .schedule-time {
+            font-size: 12px;
+            color: var(--secondary-600);
+            background: var(--secondary-100);
+            padding: 4px 8px;
+            border-radius: 8px;
+        }
+
+        .schedule-details {
+            font-size: 14px;
+            color: var(--secondary-600);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            height: 80px;
+            background: white;
+            border-top: 1px solid var(--secondary-200);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: 20px;
+            position: relative;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 8px;
+            border-radius: 12px;
+        }
+
+        .nav-item:active {
+            background: var(--secondary-100);
+        }
+
+        .nav-item.active {
+            color: var(--primary-600);
+        }
+
+        .nav-item i {
+            width: 24px;
+            height: 24px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        /* Schedules Screen */
+        .schedules-screen {
+            background: var(--secondary-50);
+        }
+
+        .calendar-header {
+            background: white;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--secondary-200);
+        }
+
+        .calendar-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .calendar-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .calendar-grid {
+            background: white;
+            margin: 16px;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .week-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .day-header {
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--secondary-600);
+            padding: 8px;
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            background: var(--secondary-50);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .calendar-day:active {
+            background: var(--primary-100);
+            transform: scale(0.95);
+        }
+
+        .calendar-day.has-event {
+            background: var(--primary-100);
+        }
+
+        .calendar-day.today {
+            background: var(--primary-600);
+            color: white;
+        }
+
+        .day-number {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .event-indicator {
+            width: 4px;
+            height: 4px;
+            background: var(--primary-600);
+            border-radius: 50%;
+        }
+
+        .calendar-day.today .event-indicator {
+            background: white;
+        }
+
+        /* Routes Screen */
+        .routes-screen {
+            background: var(--secondary-50);
+        }
+
+        .route-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 16px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .route-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .route-info h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .route-meta {
+            font-size: 14px;
+            color: var(--secondary-600);
+        }
+
+        .route-status {
+            background: var(--primary-100);
+            color: var(--primary-700);
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .route-progress {
+            margin-bottom: 16px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--secondary-200);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-600);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            font-size: 12px;
+            color: var(--secondary-600);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .route-stops {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .stop-badge {
+            background: var(--secondary-100);
+            color: var(--secondary-700);
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .stop-badge.completed {
+            background: var(--primary-100);
+            color: var(--primary-700);
+        }
+
+        /* Profile Screen */
+        .profile-screen {
+            background: var(--secondary-50);
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+            padding: 24px;
+            text-align: center;
+            color: white;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .profile-role {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .profile-menu {
+            background: white;
+            margin: 16px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            border-bottom: 1px solid var(--secondary-100);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item:active {
+            background: var(--secondary-50);
+        }
+
+        .menu-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .menu-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--secondary-100);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-text h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .menu-text p {
+            font-size: 12px;
+            color: var(--secondary-600);
+        }
+
+        .menu-arrow {
+            color: var(--secondary-400);
+        }
+
+        /* Error Messages */
+        .error-message {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            animation: shake 0.3s ease-in-out;
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive for larger screens */
+        @media (min-width: 428px) {
+            .mobile-app {
+                border-radius: 40px;
+                overflow: hidden;
+            }
+        }
+
+        /* Touch feedback */
+        .touch-feedback {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .touch-feedback::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        .touch-feedback:active::after {
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-app">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-left">
+                <span id="currentTime">9:41</span>
+            </div>
+            <div class="status-right">
+                <i data-lucide="wifi" style="width: 16px; height: 16px;"></i>
+                <i data-lucide="battery" style="width: 16px; height: 16px;"></i>
+            </div>
+        </div>
+
+        <!-- Login Screen -->
+        <div id="loginScreen" class="screen login-screen active">
+            <div class="login-content">
+                <div class="logo-section">
+                    <div class="app-logo">
+                        <i data-lucide="leaf" style="width: 40px; height: 40px; color: white;"></i>
+                    </div>
+                    <h1 class="app-title">BasuraSmart</h1>
+                    <p class="app-subtitle">Waste Management System</p>
+                </div>
+
+                <div class="form-section">
+                    <h2 class="form-title">Welcome Back</h2>
+                    
+                    <form id="loginForm">
+                        <div class="input-group">
+                            <label class="input-label" for="mobileEmail">Email Address</label>
+                            <div class="input-icon">
+                                <input type="email" id="mobileEmail" class="mobile-input" placeholder="Enter your email" required>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label" for="mobilePassword">Password</label>
+                            <div class="input-icon">
+                                <input type="password" id="mobilePassword" class="mobile-input" placeholder="Enter your password" required>
+                                <i data-lucide="eye" id="passwordToggle" style="cursor: pointer;"></i>
+                            </div>
+                        </div>
+
+                        <div id="mobileError" class="error-message" style="display: none;"></div>
+
+                        <button type="submit" class="mobile-button btn-primary touch-feedback">
+                            Sign In
+                        </button>
+
+                        <div style="text-align: center; margin-top: 16px;">
+                            <small style="color: var(--secondary-500);">Demo: admin@basurasmart.com</small><br>
+                            <small style="color: var(--secondary-500);">Password: admin123</small>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Screen -->
+        <div id="dashboardScreen" class="screen dashboard-screen">
+            <div class="dashboard-header">
+                <div class="header-top">
+                    <div>
+                        <h1 class="welcome-text">Hi, Admin! 👋</h1>
+                        <div class="location-info">
+                            <i data-lucide="map-pin" style="width: 16px; height: 16px;"></i>
+                            <span>Barangay Obrero, Butuan City</span>
+                        </div>
+                    </div>
+                    <div class="notification-bell">
+                        <i data-lucide="bell" style="width: 20px; height: 20px;"></i>
+                        <div class="notification-dot"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="flex: 1; overflow-y: auto;">
+                <!-- Quick Stats -->
+                <div class="mobile-card">
+                    <div class="card-header">
+                        <h2 class="card-title">Today's Overview</h2>
+                        <i data-lucide="more-horizontal" style="width: 20px; height: 20px; color: var(--secondary-400);"></i>
+                    </div>
+                    <div class="quick-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">24</div>
+                            <div class="stat-label">Collections</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">8</div>
+                            <div class="stat-label">Active Routes</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">94%</div>
+                            <div class="stat-label">Completed</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">2.4t</div>
+                            <div class="stat-label">Collected</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Today's Schedule -->
+                <div class="mobile-card">
+                    <div class="card-header">
+                        <h2 class="card-title">Today's Schedule</h2>
+                        <span style="color: var(--primary-600); font-size: 14px; font-weight: 500;">View all</span>
+                    </div>
+                    
+                    <div class="schedule-card">
+                        <div class="schedule-header">
+                            <div class="schedule-title">Biodegradable Collection</div>
+                            <div class="schedule-time">8:00 AM</div>
+                        </div>
+                        <div class="schedule-details">Route A • 12 stops • Juan Dela Cruz</div>
+                    </div>
+
+                    <div class="schedule-card">
+                        <div class="schedule-header">
+                            <div class="schedule-title">Recyclables Collection</div>
+                            <div class="schedule-time">2:00 PM</div>
+                        </div>
+                        <div class="schedule-details">Route B • 8 stops • Maria Santos</div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="mobile-card">
+                    <div class="card-header">
+                        <h2 class="card-title">Recent Activity</h2>
+                        <i data-lucide="refresh-cw" style="width: 20px; height: 20px; color: var(--secondary-400);"></i>
+                    </div>
+                    
+                    <div style="space-y: 12px;">
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--secondary-100);">
+                            <div style="width: 40px; height: 40px; background: var(--primary-100); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i data-lucide="check" style="width: 20px; height: 20px; color: var(--primary-600);"></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <p style="font-weight: 500; font-size: 14px;">Route A completed</p>
+                                <p style="color: var(--secondary-600); font-size: 12px;">2 hours ago</p>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0;">
+                            <div style="width: 40px; height: 40px; background: var(--accent-100); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <i data-lucide="user-plus" style="width: 20px; height: 20px; color: var(--accent-600);"></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <p style="font-weight: 500; font-size: 14px;">New resident registered</p>
+                                <p style="color: var(--secondary-600); font-size: 12px;">4 hours ago</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="bottom-nav">
+                <div class="nav-item active" data-screen="dashboard">
+                    <i data-lucide="home"></i>
+                    <span class="nav-label">Home</span>
+                </div>
+                <div class="nav-item" data-screen="schedules">
+                    <i data-lucide="calendar"></i>
+                    <span class="nav-label">Schedule</span>
+                </div>
+                <div class="nav-item" data-screen="routes">
+                    <i data-lucide="map"></i>
+                    <span class="nav-label">Routes</span>
+                </div>
+                <div class="nav-item" data-screen="profile">
+                    <i data-lucide="user"></i>
+                    <span class="nav-label">Profile</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schedules Screen -->
+        <div id="schedulesScreen" class="screen schedules-screen">
+            <div class="calendar-header">
+                <h1 class="calendar-title">Collection Schedule</h1>
+                <div class="calendar-nav">
+                    <i data-lucide="chevron-left" style="width: 24px; height: 24px; cursor: pointer;"></i>
+                    <span style="font-weight: 600;">May 2024</span>
+                    <i data-lucide="chevron-right" style="width: 24px; height: 24px; cursor: pointer;"></i>
+                </div>
+            </div>
+
+            <div style="flex: 1; overflow-y: auto;">
+                <div class="calendar-grid">
+                    <div class="week-days">
+                        <div class="day-header">Mon</div>
+                        <div class="day-header">Tue</div>
+                        <div class="day-header">Wed</div>
+                        <div class="day-header">Thu</div>
+                        <div class="day-header">Fri</div>
+                        <div class="day-header">Sat</div>
+                        <div class="day-header">Sun</div>
+                    </div>
+                    <div class="calendar-days">
+                        <div class="calendar-day has-event">
+                            <div class="day-number">1</div>
+                            <div class="event-indicator"></div>
+                        </div>
+                        <div class="calendar-day has-event">
+                            <div class="day-number">2</div>
+                            <div class="event-indicator"></div>
+                        </div>
+                        <div class="calendar-day has-event">
+                            <div class="day-number">3</div>
+                            <div class="event-indicator"></div>
+                        </div>
+                        <div class="calendar-day">
+                            <div class="day-number">4</div>
+                        </div>
+                        <div class="calendar-day has-event">
+                            <div class="day-number">5</div>
+                            <div class="event-indicator"></div>
+                        </div>
+                        <div class="calendar-day has-event">
+                            <div class="day-number">6</div>
+                            <div class="event-indicator"></div>
+                        </div>
+                        <div class="calendar-day today">
+                            <div class="day-number">7</div>
+                            <div class="event-indicator"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mobile-card" style="margin: 16px;">
+                    <div class="card-header">
+                        <h2 class="card-title">Upcoming Collections</h2>
+                    </div>
+                    
+                    <div style="space-y: 12px;">
+                        <div class="schedule-card">
+                            <div class="schedule-header">
+                                <div class="schedule-title">Tomorrow - Biodegradable</div>
+                                <div class="schedule-time">8:00 AM</div>
+                            </div>
+                            <div class="schedule-details">Route A • 12 stops</div>
+                        </div>
+
+                        <div class="schedule-card">
+                            <div class="schedule-header">
+                                <div class="schedule-title">Friday - Recyclables</div>
+                                <div class="schedule-time">2:00 PM</div>
+                            </div>
+                            <div class="schedule-details">Route B • 8 stops</div>
+                        </div>
+
+                        <div class="schedule-card">
+                            <div class="schedule-header">
+                                <div class="schedule-title">Saturday - Non-biodegradable</div>
+                                <div class="schedule-time">9:00 AM</div>
+                            </div>
+                            <div class="schedule-details">Route C • 15 stops</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="bottom-nav">
+                <div class="nav-item" data-screen="dashboard">
+                    <i data-lucide="home"></i>
+                    <span class="nav-label">Home</span>
+                </div>
+                <div class="nav-item active" data-screen="schedules">
+                    <i data-lucide="calendar"></i>
+                    <span class="nav-label">Schedule</span>
+                </div>
+                <div class="nav-item" data-screen="routes">
+                    <i data-lucide="map"></i>
+                    <span class="nav-label">Routes</span>
+                </div>
+                <div class="nav-item" data-screen="profile">
+                    <i data-lucide="user"></i>
+                    <span class="nav-label">Profile</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Routes Screen -->
+        <div id="routesScreen" class="screen routes-screen">
+            <div class="calendar-header">
+                <h1 class="calendar-title">Collection Routes</h1>
+                <button class="mobile-button btn-secondary" style="width: auto; padding: 8px 16px; height: auto;">
+                    <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
+                    Add Route
+                </button>
+            </div>
+
+            <div style="flex: 1; overflow-y: auto;">
+                <div class="route-card">
+                    <div class="route-header">
+                        <div class="route-info">
+                            <h3>Route A - Obrero North</h3>
+                            <div class="route-meta">12 stops • Juan Dela Cruz</div>
+                        </div>
+                        <div class="route-status">Active</div>
+                    </div>
+                    <div class="route-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 67%;"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span>8 of 12 completed</span>
+                            <span>67%</span>
+                        </div>
+                    </div>
+                    <div class="route-stops">
+                        <div class="stop-badge completed">
+                            <i data-lucide="check" style="width: 12px; height: 12px;"></i>
+                            Main St
+                        </div>
+                        <div class="stop-badge completed">
+                            <i data-lucide="check" style="width: 12px; height: 12px;"></i>
+                            School
+                        </div>
+                        <div class="stop-badge">
+                            <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
+                            Market
+                        </div>
+                        <div class="stop-badge">
+                            <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
+                            Park
+                        </div>
+                    </div>
+                </div>
+
+                <div class="route-card">
+                    <div class="route-header">
+                        <div class="route-info">
+                            <h3>Route B - Obrero South</h3>
+                            <div class="route-meta">8 stops • Maria Santos</div>
+                        </div>
+                        <div class="route-status">Active</div>
+                    </div>
+                    <div class="route-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 25%;"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span>2 of 8 completed</span>
+                            <span>25%</span>
+                        </div>
+                    </div>
+                    <div class="route-stops">
+                        <div class="stop-badge completed">
+                            <i data-lucide="check" style="width: 12px; height: 12px;"></i>
+                            Center
+                        </div>
+                        <div class="stop-badge completed">
+                            <i data-lucide="check" style="width: 12px; height: 12px;"></i>
+                            Hospital
+                        </div>
+                        <div class="stop-badge">
+                            <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
+                            Market
+                        </div>
+                        <div class="stop-badge">
+                            <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
+                            Commercial
+                        </div>
+                    </div>
+                </div>
+
+                <div class="route-card">
+                    <div class="route-header">
+                        <div class="route-info">
+                            <h3>Route C - Obrero Central</h3>
+                            <div class="route-meta">15 stops • Not assigned</div>
+                        </div>
+                        <div class="route-status" style="background: var(--secondary-100); color: var(--secondary-700);">Inactive</div>
+                    </div>
+                    <div class="route-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%;"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span>0 of 15 completed</span>
+                            <span>0%</span>
+                        </div>
+                    </div>
+                    <div class="route-stops">
+                        <div class="stop-badge">
+                            <i data-lucide="map-pin" style="width: 12px; height: 12px;"></i>
+                            City Hall
+                        </div>
+                        <div class="stop-badge">
+                            <i data-lucide="map-pin" style="width: 12px; height: 12px;"></i>
+                            Bus Terminal
+                        </div>
+                        <div class="stop-badge">
+                            <i data-lucide="map-pin" style="width: 12px; height: 12px;"></i>
+                            Public Market
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="bottom-nav">
+                <div class="nav-item" data-screen="dashboard">
+                    <i data-lucide="home"></i>
+                    <span class="nav-label">Home</span>
+                </div>
+                <div class="nav-item" data-screen="schedules">
+                    <i data-lucide="calendar"></i>
+                    <span class="nav-label">Schedule</span>
+                </div>
+                <div class="nav-item active" data-screen="routes">
+                    <i data-lucide="map"></i>
+                    <span class="nav-label">Routes</span>
+                </div>
+                <div class="nav-item" data-screen="profile">
+                    <i data-lucide="user"></i>
+                    <span class="nav-label">Profile</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Screen -->
+        <div id="profileScreen" class="screen profile-screen">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <i data-lucide="user" style="width: 40px; height: 40px; color: var(--primary-600);"></i>
+                </div>
+                <h2 class="profile-name">Admin User</h2>
+                <p class="profile-role">System Administrator</p>
+            </div>
+
+            <div style="flex: 1; overflow-y: auto;">
+                <div class="profile-menu">
+                    <div class="menu-item">
+                        <div class="menu-left">
+                            <div class="menu-icon">
+                                <i data-lucide="user" style="width: 20px; height: 20px; color: var(--primary-600);"></i>
+                            </div>
+                            <div class="menu-text">
+                                <h4>Edit Profile</h4>
+                                <p>Update your information</p>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="menu-arrow" style="width: 20px; height: 20px;"></i>
+                    </div>
+
+                    <div class="menu-item">
+                        <div class="menu-left">
+                            <div class="menu-icon">
+                                <i data-lucide="bell" style="width: 20px; height: 20px; color: var(--accent-600);"></i>
+                            </div>
+                            <div class="menu-text">
+                                <h4>Notifications</h4>
+                                <p>Manage alerts and reminders</p>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="menu-arrow" style="width: 20px; height: 20px;"></i>
+                    </div>
+
+                    <div class="menu-item">
+                        <div class="menu-left">
+                            <div class="menu-icon">
+                                <i data-lucide="shield" style="width: 20px; height: 20px; color: var(--secondary-600);"></i>
+                            </div>
+                            <div class="menu-text">
+                                <h4>Privacy & Security</h4>
+                                <p>Password and authentication</p>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="menu-arrow" style="width: 20px; height: 20px;"></i>
+                    </div>
+
+                    <div class="menu-item">
+                        <div class="menu-left">
+                            <div class="menu-icon">
+                                <i data-lucide="help-circle" style="width: 20px; height: 20px; color: var(--secondary-600);"></i>
+                            </div>
+                            <div class="menu-text">
+                                <h4>Help & Support</h4>
+                                <p>FAQs and contact support</p>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="menu-arrow" style="width: 20px; height: 20px;"></i>
+                    </div>
+
+                    <div class="menu-item">
+                        <div class="menu-left">
+                            <div class="menu-icon">
+                                <i data-lucide="log-out" style="width: 20px; height: 20px; color: #ef4444;"></i>
+                            </div>
+                            <div class="menu-text">
+                                <h4 style="color: #ef4444;">Logout</h4>
+                                <p>Sign out of your account</p>
+                            </div>
+                        </div>
+                        <i data-lucide="chevron-right" class="menu-arrow" style="width: 20px; height: 20px;"></i>
+                    </div>
+                </div>
+
+                <div class="mobile-card" style="margin: 16px;">
+                    <div class="card-header">
+                        <h2 class="card-title">App Info</h2>
+                    </div>
+                    <div style="space-y: 8px;">
+                        <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+                            <span style="color: var(--secondary-600); font-size: 14px;">Version</span>
+                            <span style="font-weight: 500; font-size: 14px;">1.0.0</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+                            <span style="color: var(--secondary-600); font-size: 14px;">Last Update</span>
+                            <span style="font-weight: 500; font-size: 14px;">May 1, 2024</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="bottom-nav">
+                <div class="nav-item" data-screen="dashboard">
+                    <i data-lucide="home"></i>
+                    <span class="nav-label">Home</span>
+                </div>
+                <div class="nav-item" data-screen="schedules">
+                    <i data-lucide="calendar"></i>
+                    <span class="nav-label">Schedule</span>
+                </div>
+                <div class="nav-item" data-screen="routes">
+                    <i data-lucide="map"></i>
+                    <span class="nav-label">Routes</span>
+                </div>
+                <div class="nav-item active" data-screen="profile">
+                    <i data-lucide="user"></i>
+                    <span class="nav-label">Profile</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Mobile App State
+        let currentUser = null;
+        let currentScreen = 'login';
+
+        // DOM Elements
+        const screens = {
+            login: document.getElementById('loginScreen'),
+            dashboard: document.getElementById('dashboardScreen'),
+            schedules: document.getElementById('schedulesScreen'),
+            routes: document.getElementById('routesScreen'),
+            profile: document.getElementById('profileScreen')
+        };
+
+        // Mobile Navigation
+        function showScreen(screenName) {
+            // Hide all screens
+            Object.values(screens).forEach(screen => {
+                screen.classList.remove('active');
+            });
+
+            // Show target screen
+            if (screens[screenName]) {
+                screens[screenName].classList.add('active');
+                currentScreen = screenName;
+
+                // Reinitialize icons for the new screen
+                setTimeout(() => lucide.createIcons(), 100);
+
+                // Update navigation active state
+                updateNavActive(screenName);
+            }
+        }
+
+        function updateNavActive(screenName) {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.screen === screenName) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // Mobile Login Form Handler
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('mobileEmail').value;
+            const password = document.getElementById('mobilePassword').value;
+            const errorDiv = document.getElementById('mobileError');
+
+            // Basic validation
+            if (!email || !password) {
+                errorDiv.textContent = 'Please fill in all fields';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                errorDiv.textContent = 'Please enter a valid email address';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            // Show loading state
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<div class="loading"><div class="spinner"></div>Signing in...</div>';
+            submitBtn.disabled = true;
+
+            // Simulate API call
+            setTimeout(() => {
+                // Mock authentication
+                if (email === 'admin@basurasmart.com' && password === 'admin123') {
+                    currentUser = { email, name: 'Admin User' };
+                    showScreen('dashboard');
+                    updateMobileTime();
+                    setInterval(updateMobileTime, 60000);
+                } else {
+                    errorDiv.textContent = 'Invalid email or password';
+                    errorDiv.style.display = 'block';
+                }
+
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 1500);
+        });
+
+        // Mobile Navigation Event Listeners
+        document.querySelectorAll('.nav-item[data-screen]').forEach(item => {
+            item.addEventListener('click', function() {
+                const screenName = this.dataset.screen;
+                showScreen(screenName);
+                
+                // Add haptic feedback simulation
+                if (navigator.vibrate) {
+                    navigator.vibrate(10);
+                }
+            });
+        });
+
+        // Logout from Profile
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const text = this.querySelector('h4')?.textContent;
+                if (text === 'Logout') {
+                    currentUser = null;
+                    showScreen('login');
+                    document.getElementById('loginForm').reset();
+                    document.getElementById('mobileError').style.display = 'none';
+                }
+            });
+        });
+
+        // Password Toggle
+        document.getElementById('passwordToggle').addEventListener('click', function() {
+            const passwordInput = document.getElementById('mobilePassword');
+            const isPassword = passwordInput.type === 'password';
+            passwordInput.type = isPassword ? 'text' : 'password';
+            this.setAttribute('data-lucide', isPassword ? 'eye-off' : 'eye');
+            lucide.createIcons();
+        });
+
+        // Update Mobile Time
+        function updateMobileTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour: 'numeric', 
+                minute: '2-digit',
+                hour12: false 
+            });
+            const timeElement = document.getElementById('currentTime');
+            if (timeElement) {
+                timeElement.textContent = timeString;
+            }
+        }
+
+        // Clear login errors on input
+        document.getElementById('mobileEmail').addEventListener('input', function() {
+            document.getElementById('mobileError').style.display = 'none';
+        });
+
+        document.getElementById('mobilePassword').addEventListener('input', function() {
+            document.getElementById('mobileError').style.display = 'none';
+        });
+
+        // Mobile Touch Feedback
+        document.querySelectorAll('.mobile-button, .nav-item, .menu-item, .schedule-card, .calendar-day').forEach(element => {
+            element.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.98)';
+            });
+            element.addEventListener('touchend', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+
+        // Prevent zoom on double tap
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(event) {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
+        // Initialize
+        showScreen('login');
+        updateMobileTime();
+    </script>
+</body>
+</html>
